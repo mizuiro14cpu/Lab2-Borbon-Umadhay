@@ -39,3 +39,5 @@ router.post('/', async (req: Request, res: Response) => {
 
     res.status(201).json(data[0]);
 });
+
+export default router
