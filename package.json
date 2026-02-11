@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "start": "ts-node src/server.ts",
+    "test:unit": "jest src/__tests__/*.test.ts",
+    "test:integration": "dotenv -e .env.test -- jest src/__tests__/*.integration.test.ts",
+    "test": "npm run test:unit && npm run test:integration"
   },
   "repository": {
     "type": "git",
@@ -29,6 +32,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^25.2.3",
     "@types/supertest": "^6.0.3",
+    "dotenv-cli": "^11.0.0",
     "jest": "^30.2.0",
     "nodemon": "^3.1.11",
     "supertest": "^7.2.2",
