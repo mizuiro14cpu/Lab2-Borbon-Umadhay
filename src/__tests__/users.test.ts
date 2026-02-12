@@ -60,4 +60,24 @@ describe('Users API (Supabase)', () => {
         expect(res.statusCode).toEqual(500);
         expect(res.body.error).toEqual("Database connection failed");
     });
+
+    // it('should search for users after adding users to the db', async () => {
+    //     const usersData = [
+    //         { id: 1, username: 'DeafMuteDeezNuts', email: 'dmdn@gmail.com' }, 
+    //         { id: 2, username: 'bcbach190', email: 'bcbach@gmail.com' }, 
+    //         { id: 3, username: 'borgar_69', email: 'borgar@gmail.com' }];
+
+    //     const searchInput = [{ username: 'bcbach190'}]
+    //     const mockResponse = [{ id: 2, username: 'bcbach190', email: 'bcbach@gmail.com' }];
+
+    //     (supabase.from as jest.Mock).mockReturnValue({
+    //         insert: jest.fn().mockReturnThis(),
+    //         select: jest.fn().mockResolvedValue({ data: mockResponse, error: null })
+    //     })
+
+    //     const res = await request(app).post('/api/users').send(usersData).get('/api);
+
+    //     expect(res.statusCode).toEqual(201);
+    //     expect(res.body).toEqual(mockResponse);
+    // })
 });

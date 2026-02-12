@@ -26,7 +26,24 @@ export const createUser = async (req: Request, res: Response) => {
     }
 };
 
+export const searchUser = async (req: Request, res: Response) => {
+    const { search } = req.body;
+
+    if (!search) {
+        res.status(400).json({ error: 'A search input is required' });
+        return
+    }
+
+    try {
+        const users = await userService.searchUser(search);
+        res.json(users)
+    } catch (err: any) {
+        res.status(500).json({ error: err.message })
+    }
+}
+
 export default {
     getUsers,
     createUser,
+    searchUser,
 };
