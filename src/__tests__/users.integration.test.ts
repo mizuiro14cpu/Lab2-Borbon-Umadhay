@@ -52,7 +52,20 @@ describe('Users API Integration test (connected to DB)', () => {
         expect(searchRes.statusCode).toEqual(200);
         expect(searchRes.body.length).toBeGreaterThan(0);
         expect(searchRes.body[0].username).toContain('Grizz')
-    })
+    });
 
+    it('Should return an empty array when no users match the search query', async () => {
+        await request(app)
+            .post('/api/users')
+            .send({ username: 'syni', email: 'syni@gmail.com' });
+
+        const res = await request(app)
+            .post('/api/users/search')
+            .send({ search: 'memeng' });
+
+        expect(res.statusCode).toEqual(200);
+        expect(Array.isArray(res.body)).toBe(true);
+        expect(res.body.length).toEqual(0); 
+    });
 
 })
