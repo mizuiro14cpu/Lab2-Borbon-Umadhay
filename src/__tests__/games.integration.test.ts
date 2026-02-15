@@ -12,6 +12,7 @@ describe('Games API Integration test (connected to DB)', () => {
         // close connection
     });
 
+    // happy 1
     it('Should add one game to the database', async () => {
         const newGame = { title: 'Lies of P', release_year: 2023}
 
@@ -28,6 +29,7 @@ describe('Games API Integration test (connected to DB)', () => {
         expect(dbCheck.body[0].title).toEqual(newGame.title)
     })
 
+    // happy 2
     it('Should add multiple games to the database', async () => {
         const newGame = [
             { title: 'Sekiro: Shadows Die Twice', release_year: 2019 },
@@ -49,6 +51,7 @@ describe('Games API Integration test (connected to DB)', () => {
         expect(dbCheck.body.length).toEqual(3);
     });
 
+    // sad 1
     it('Should return 400 Bad Request if title is missing', async () => {
         const newInvalidGame = { release_year: 2024}
 

@@ -12,6 +12,7 @@ describe('Users API Integration test (connected to DB)', () => {
         // close connection
     })
 
+    // happy 1
     it('Should save a new user to the database', async () => {
         const newUser = { username: 'ybgm', email: 'ybgm@gmail.com' }
 
@@ -28,6 +29,7 @@ describe('Users API Integration test (connected to DB)', () => {
         expect(dbCheck.body[0].username).toEqual(newUser.username)
     });
 
+    // happy 2
     it('Should upload an array of users then search for a user in the database and return the output', async () => {
         const userList = [
             { username: 'Mr. Chedda', email: 'mrchedda@gmail.com' },
@@ -54,6 +56,7 @@ describe('Users API Integration test (connected to DB)', () => {
         expect(searchRes.body[0].username).toContain('Grizz')
     });
 
+    // sad 1
     it('Should return an empty array when no users match the search query', async () => {
         await request(app)
             .post('/api/users')
@@ -68,18 +71,17 @@ describe('Users API Integration test (connected to DB)', () => {
         expect(res.body.length).toEqual(0); 
     });
 
+    // sad 2
     it('Should return 400 if an item in the bulk upload array is missing required fields', async () => {
         const mixedBatch = [
             { username: 'ValidUser', email: 'valid@test.com' },
-            { username: 'InvalidUser' } // Missing email!
+            { username: 'InvalidUser' }
         ];
 
         const res = await request(app)
             .post('/api/users')
             .send(mixedBatch);
 
-        // If your controller only checks userData[0], this might accidentally pass (201)
-        // and then crash in the DB. We WANT it to be a 400.
         expect(res.statusCode).toEqual(400);
         expect(res.body.error).toMatch(/required/);
     });
