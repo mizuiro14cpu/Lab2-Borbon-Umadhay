@@ -10,7 +10,44 @@ describe('Games API Integration test (connected to DB)', () => {
 
     afterAll(async () => {
         // close connection
-    })
+    });
 
+    it('Should add one game to the database', async () => {
+        const newGame = { title: 'Lies of P', release_year: 2023}
+
+        const res = await request(app)
+            .post('/api/games')
+            .send(newGame);
+        
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.id).toBeDefined();
+
+        const dbCheck = await request(app).get('/api/games');
+
+        expect(dbCheck.body.length).toEqual(1);
+        expect(dbCheck.body[0].title).toEqual(newGame.title)
+    })
     
-})
+    it('Should add multiple games to the database', async () => {
+        const newGame = [
+            { title: 'Sekiro: Shadows Die Twice', release_year: 2019 },
+            { title: 'Hollow Knight: Silksong', release_year: 2025 },
+            { title: 'God of War: Ragnarok', release_year: 2022 },
+        ];
+
+        const res = await request(app)
+            .post('/api/games')
+            .send(newGame);
+
+        expect(res.statusCode).toEqual(201);
+        expect(Array.isArray(res.body)).toBe(true);
+        expect(res.body.length).toBe(3);
+        expect(res.body[0].id).toBeDefined();
+
+        const dbCheck = await request(app).get('/api/games');
+
+        expect(dbCheck.body.length).toEqual(3);
+    });
+
+
+});

@@ -26,5 +26,5 @@ describe('Users API Integration test (connected to DB)', () => {
 
         expect(dbCheck.body.length).toEqual(1)
         expect(dbCheck.body[0].username).toEqual(newUser.username)
-    })
+    });
 })
