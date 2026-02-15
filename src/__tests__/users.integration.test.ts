@@ -27,4 +27,32 @@ describe('Users API Integration test (connected to DB)', () => {
         expect(dbCheck.body.length).toEqual(1)
         expect(dbCheck.body[0].username).toEqual(newUser.username)
     });
+
+    it('Should upload an array of users then search for a user in the database and return the output', async () => {
+        const userList = [
+            { username: 'Mr. Chedda', email: 'mrchedda@gmail.com' },
+            { username: 'Grizz', email: 'grizz@gmail.com' },
+            { username: 'Borgar_69', email: 'borgar@gmail.com'}
+        ];
+
+        const uploadRes = await request(app)
+            .post('/api/users')
+            .send(userList);
+        
+        expect(uploadRes.statusCode).toEqual(201);
+
+        const dbCheck = await request(app).get('/api/users');
+
+        expect(dbCheck.body.length).toEqual(3)
+
+        const searchRes = await request(app)
+            .post('/api/users/search')
+            .send({ search: 'Grizz' });
+        
+        expect(searchRes.statusCode).toEqual(200);
+        expect(searchRes.body.length).toBeGreaterThan(0);
+        expect(searchRes.body[0].username).toContain('Grizz')
+    })
+
+
 })

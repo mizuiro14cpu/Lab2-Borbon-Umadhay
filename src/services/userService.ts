@@ -22,23 +22,25 @@ export const searchUser = async (query: string): Promise<User[]> => {
     const { data, error } = await supabase
         .from("users")
         .select("*")
-        .ilike("name", `%${query}%`);
+        .ilike("username", `%${query}%`);
     
     if (error) throw new Error(error.message);
     return data || []
 };
 
-export const createUser = async (username: string, email: string): Promise<User> => {
+export const createUser = async (userData: User | User[]): Promise<User[]> => {
+    const payload = Array.isArray(userData) ? userData : [userData];
+
     const { data, error } = await supabase
         .from('users')
-        .insert([{ username, email }])
+        .insert(payload)
         .select();
 
     if (error) {
         throw new Error(error.message);
     }
 
-    return (data as User[])[0];
+    return data as User[];
 };
 
 export default {

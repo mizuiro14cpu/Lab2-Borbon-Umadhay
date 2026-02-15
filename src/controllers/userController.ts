@@ -11,16 +11,19 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-    const { username, email } = req.body;
+    const userData = req.body;
 
-    if (!username || !email) {
+    const check = Array.isArray(userData) ? userData[0] : userData;
+
+    if (!check?.username || !check?.email) {
         res.status(400).json({ error: 'Username and email are required' });
         return;
     }
 
     try {
-        const user = await userService.createUser(username, email);
-        res.status(201).json(user);
+        const users = await userService.createUser(userData);
+        const responseBody = Array.isArray(userData) ? users : users[0];
+        res.status(201).json(responseBody);
     } catch (err: any) {
         res.status(500).json({ error: err.message });
     }
