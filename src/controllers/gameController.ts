@@ -46,7 +46,6 @@ export const createGame = async (req: Request, res: Response) => {
     }
 };
 
-
 export default {
     getGames,
     createGame,

@@ -63,6 +63,4 @@ describe('Games API Integration test (connected to DB)', () => {
         const dbCheck = await request(app).get('/api/games');
         expect(dbCheck.body.length).toEqual(0);
     })
-
-
 });

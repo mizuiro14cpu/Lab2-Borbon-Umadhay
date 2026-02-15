@@ -13,10 +13,12 @@ export const getUsers = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
     const userData = req.body;
 
-    const check = Array.isArray(userData) ? userData[0] : userData;
+    const usersToValidate = Array.isArray(userData) ? userData : [userData];
 
-    if (!check?.username || !check?.email) {
-        res.status(400).json({ error: 'Username and email are required' });
+    const invalidUser = usersToValidate.find(u => !u.username || !u.email);
+
+    if (invalidUser) {
+        res.status(400).json({ error: 'Username and email are required for all users' });
         return;
     }
 
