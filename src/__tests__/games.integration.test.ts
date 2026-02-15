@@ -27,7 +27,7 @@ describe('Games API Integration test (connected to DB)', () => {
         expect(dbCheck.body.length).toEqual(1);
         expect(dbCheck.body[0].title).toEqual(newGame.title)
     })
-    
+
     it('Should add multiple games to the database', async () => {
         const newGame = [
             { title: 'Sekiro: Shadows Die Twice', release_year: 2019 },
@@ -48,6 +48,21 @@ describe('Games API Integration test (connected to DB)', () => {
 
         expect(dbCheck.body.length).toEqual(3);
     });
+
+    it('Should return 400 Bad Request if title is missing', async () => {
+        const newInvalidGame = { release_year: 2024}
+
+        const res = await request(app)
+            .post('/api/games')
+            .send(newInvalidGame);
+        
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('error');
+        expect(res.body.error).toBe('Title is required');
+
+        const dbCheck = await request(app).get('/api/games');
+        expect(dbCheck.body.length).toEqual(0);
+    })
 
 
 });
