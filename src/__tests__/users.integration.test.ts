@@ -72,7 +72,7 @@ describe('Users API Integration test (connected to DB)', () => {
     });
 
     // sad 2
-    it('Should return 400 if an item in the bulk upload array is missing required fields', async () => {
+    it('Should return 400 if an item in the uploaded array is missing required fields', async () => {
         const mixedBatch = [
             { username: 'ValidUser', email: 'valid@test.com' },
             { username: 'InvalidUser' }
