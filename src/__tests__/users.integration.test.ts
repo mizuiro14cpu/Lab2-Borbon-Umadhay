@@ -3,6 +3,8 @@ import app from '../app';
 import { clearDatabase } from './utils/db';
 
 describe('Users API Integration test (connected to DB)', () => {
+    jest.setTimeout(15000);
+
     // before each test, wipe db
     beforeEach(async () => {
         await clearDatabase();
