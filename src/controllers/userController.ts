@@ -11,22 +11,44 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-    const { username, email } = req.body;
+    const userData = req.body;
 
-    if (!username || !email) {
-        res.status(400).json({ error: 'Username and email are required' });
+    const usersToValidate = Array.isArray(userData) ? userData : [userData];
+
+    const invalidUser = usersToValidate.find(u => !u.username || !u.email);
+
+    if (invalidUser) {
+        res.status(400).json({ error: 'Username and email are required for all users' });
         return;
     }
 
     try {
-        const user = await userService.createUser(username, email);
-        res.status(201).json(user);
+        const users = await userService.createUser(userData);
+        const responseBody = Array.isArray(userData) ? users : users[0];
+        res.status(201).json(responseBody);
     } catch (err: any) {
         res.status(500).json({ error: err.message });
     }
 };
 
+export const searchUser = async (req: Request, res: Response) => {
+    const { search } = req.body;
+
+    if (!search) {
+        res.status(400).json({ error: 'A search input is required' });
+        return
+    }
+
+    try {
+        const users = await userService.searchUser(search);
+        res.json(users)
+    } catch (err: any) {
+        res.status(500).json({ error: err.message })
+    }
+}
+
 export default {
     getUsers,
     createUser,
+    searchUser,
 };

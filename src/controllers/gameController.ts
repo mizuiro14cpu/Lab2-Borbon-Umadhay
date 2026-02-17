@@ -11,18 +11,22 @@ export const getGames = async (req: Request, res: Response) => {
 };
 
 export const createGame = async (req: Request, res: Response) => {
-    const { title, release_year } = req.body;
+    const games = req.body;
 
-    if (!title) {
+    const firstGame = Array.isArray(games) ? games[0] : games;
+    if (!firstGame?.title) {
         res.status(400).json({ error: 'Title is required' });
-        return;
+        return
     }
 
     try {
-        const game = await gameService.createGame(title, release_year);
-        res.status(201).json(game);
+        const createdGames = await gameService.createGame(games);
+
+        const responseData = Array.isArray(games) ? createdGames : createdGames[0];
+
+        res.status(201).json(responseData);
     } catch (err: any) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message})
     }
 };
 
