@@ -10,25 +10,10 @@ const supabaseKey = process.env.SUPABASE_KEY!;
 export const testClient = createClient(supabaseUrl, supabaseKey);
 
 export const clearDatabase = async () => {
-    const tables = ['game_genres', 'user_games', 'games', 'genres', 'users', 'developers'];
-
-    for (const table of tables) {
-        const { error } = await testClient
-            .from(table)
-            .delete()
-            .not('id', 'is', null);
-
-        if (error) {
-            if (table === 'game_genres' || table === 'user_games') {
-                const { error: joinError } = await testClient.from(table).delete().not('game_id', 'is', null);
-                if (joinError) {
-                    console.error(`Failed to clear ${table}: ${joinError.message}`);
-                    throw new Error(`Failed to clear ${table}: ${joinError.message}`);
-                }
-            } else {
-                console.error(`Failed to clear ${table}: ${error.message}`);
-                throw new Error(`Failed to clear ${table}: ${error.message}`);
-            }
-        }
-    }
+    await testClient.from('game_genres').delete().neq('game_id', 0);
+    await testClient.from('user_games').delete().neq('user_id', 0);
+    await testClient.from('games').delete().neq('id', 0);
+    await testClient.from('genres').delete().neq('id', 0);
+    await testClient.from('users').delete().neq('id', 0);
+    await testClient.from('developers').delete().neq('id', 0);
 }
