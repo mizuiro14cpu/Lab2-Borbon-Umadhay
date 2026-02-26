@@ -9,36 +9,26 @@ const supabaseKey = process.env.SUPABASE_KEY!;
 
 export const testClient = createClient(supabaseUrl, supabaseKey);
 
-// export const clearDatabase = async () => {
-//     const { error } = await testClient
-//         .from('users')
-//         .delete()
-//         .neq('id', 0)
-    
-//         if (error) {
-//             throw new Error(`Failed to clear database: ${error.message}`)
-//         }
-// }
-
 export const clearDatabase = async () => {
-    let error;
+    const tables = ['game_genres', 'user_games', 'games', 'genres', 'users', 'developers'];
 
-    // delete bridge tables first
-    ({ error } = await testClient.from('game_genres').delete().neq('game_id', 0))
-    if (error) {throw new Error(`Failed to clear game_genres: ${error.message}`)}
+    for (const table of tables) {
+        const { error } = await testClient
+            .from(table)
+            .delete()
+            .not('id', 'is', null);
 
-    ({ error } = await testClient.from('user_games').delete().neq('game_id', 0))
-    if (error) {throw new Error(`Failed to clear user_games: ${error.message}`)}
-
-    ({ error } = await testClient.from('games').delete().neq('id', 0))
-    if (error) {throw new Error(`Failed to clear games: ${error.message}`)}
-
-    ({ error } = await testClient.from('genres').delete().neq('id', 0))
-    if (error) {throw new Error(`Failed to clear genres: ${error.message}`)}
-
-    ({ error } = await testClient.from('users').delete().neq('id', 0))
-    if (error) {throw new Error(`Failed to clear users: ${error.message}`)}
-
-    ({ error } = await testClient.from('developers').delete().neq('id', 0))
-    if (error) {throw new Error(`Failed to clear developers: ${error.message}`)}
+        if (error) {
+            if (table === 'game_genres' || table === 'user_games') {
+                const { error: joinError } = await testClient.from(table).delete().not('game_id', 'is', null);
+                if (joinError) {
+                    console.error(`Failed to clear ${table}: ${joinError.message}`);
+                    throw new Error(`Failed to clear ${table}: ${joinError.message}`);
+                }
+            } else {
+                console.error(`Failed to clear ${table}: ${error.message}`);
+                throw new Error(`Failed to clear ${table}: ${error.message}`);
+            }
+        }
+    }
 }
