@@ -39,8 +39,14 @@ SUPABASE_KEY=your-secret-key
 | GET | `/api/users` | Get all users |
 | POST | `/api/games` | Create a new game entry |
 | GET | `/api/games` | Get all registered games |
-***COMPLETE LATER***
-
+| GET | `/api/developers` | Get all registered devs |
+| POST | `/api/developers` | Create a new developer |
+| PUT | `/api/developers/:id` | Update Developer |
+| DELETE | `/api/developers/:id` | Delete developer |
+| GET | `/api/genres` | Get all genres |
+| POST | `/api/genres` | Create a new genre |
+| PUT | `/api/genres/:id` | Update genre |
+| DELETE | `/api/genres/:id` | Delete genre |
 
 ## Supabase Setup
 Add these tables to Supabase:
