@@ -30,4 +30,5 @@ jobs:
       - name: Run Tests
         run: npm test
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_URL: https://${{ env.PROJECT_ID }}.supabase.co
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
